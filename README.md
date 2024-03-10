@@ -1,4 +1,12 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+# Connect 4
+
+Connect-4
+Avand o tabla de dimensiune 7x7, scopul jocului este ca unul dintre jucatori sa-si plaseze jetoanele in varful unei coloane, aceasta cazand pana la spatiul corespunzator astfel incat sa formeze un rand de 4 unul langa altul, pe verticala, orizontala sau diagonala. In cazul in care nici unul dintre jucatori nu a reusit sa-si plaseze jetoanele conform regulilor pana la terminarea spatiilor libere, jocul este considerat nul.
+
+Jocul v-a avea 3 nivele de dificultate diferite, jucatori alegand nivelul dorit la inceput:
+1. Jocul simplu
+2. La fiecare piesa pusa, jucatorul alege o linie sau o coloana (sau niciuna) si aceasta se va roti si piesele vor cadea corespunzator
+3. La fiecare piesa pusa, toata tabla se va roti in sensul acelor de ceasornic la 90 de grade si piesele vor cadea corespunzator.
 
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.
