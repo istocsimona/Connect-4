@@ -1,57 +1,254 @@
 #include <iostream>
-#include <array>
 
-#include <Helper.h>
+#include <cstring>
+
+using namespace std;
+class VerifCastig
+{//clasa in care urmaresc daca un meci este castigat sau nu
+private:
+    int castigare;
+public:
+    VerifCastig()
+    {//initializez castigare cu 0, adica meciun nu este castigat. atunci cand castigare devine 1 cineva a castigat
+        castigare=0;
+    }
+    VerifCastig &operator=(const VerifCastig & castigare)
+    {
+        this->castigare=1;
+    }
+    int getCastigare() const {
+        return castigare;
+    }
+
+    void setCastigare(int castigare) {
+        VerifCastig::castigare = castigare;
+    }
+
+    ~VerifCastig()=default;
+};
+class Mutare
+{//in mutare tinem minte al cui este randul. Face cu schimbul intre 1 si 2..adica jucatorul 1 si 2
+private:
+    int mutare;
+public:
+    Mutare()=default;
+    void setMutare(const int &mutare)
+    {
+        Mutare::mutare=mutare;
+    }
+    int getMutare() const
+    {
+        return mutare;
+    }
+    friend std::ostream &operator<<(std::ostream  &out, const Mutare &tura)
+    {
+        out<<tura.mutare;
+    }
+
+    ~Mutare()=default;
+};
+class Piesa
+{//tinem cont de coloana pe care urmeaza sa punem piesa, care ulterior va cadea
+private:
+    int coloana_piesa;
+public:
+    Piesa()=default;
+    int getPiesa() const
+    {
+        return coloana_piesa;
+    }
+    friend std::istream &operator>>(std::istream &in, Piesa &piesa)
+    {
+        in>>piesa.coloana_piesa;
+        return in;
+    }
+    ~Piesa()=default;
+};
+class Jucator
+{//tinem minte numele jucatorilor si punctajul(pentru partea 2 si 3)
+private:
+    string nume;
+    //int punctaj;
+
+public:
+    Jucator()=default;
+
+    Jucator(const Jucator&jucator)
+    {
+        this->nume=jucator.nume;
+        //this->punctaj=jucator.punctaj;
+    }
+    friend std::istream &operator>>(std::istream &in, Jucator &jucator)
+    {
+        in>>jucator.nume;
+        return in;
+    }
+
+    const string &getNume() const {
+        return nume;
+    }
+
+    friend std::ostream &operator<<(std::ostream &out, const Jucator &jucator)
+    {
+        out<<jucator.nume<<endl;
+        return out;
+    }
+    ~Jucator()=default;
+};
+class Tabla
+{
+private:
+    char tabla[8][7];
+
+public:
+    Tabla()
+    {//constructor: toate elementele cu ^ si pe prima linie notam coloanele pentru joc
+        for(int i=1; i<8; i++)
+            for(int j=0; j<7; j++)
+                tabla[i][j]='^';
+        for(int j=0; j<7; j++)
+            tabla[0][j]='1'+j;
+    }
+    int verificare_jucator(int lin, int col)
+    {
+        //pe linie
+        int nr=0;
+        for(int j=0; j<6 && nr<3; j++)
+            if((tabla[lin][j]==tabla[lin][j+1]) && tabla[lin][j]!='^' && tabla[lin][j+1]!='^')
+                nr++;
+            else nr=0;
+        if(nr>=3) return 1;//castigator
+
+        //pe coloana
+        nr=0;
+        for(int i=lin; i<7 && nr<3; i++)
+            if((tabla[i][col]==tabla[i+1][col]) && tabla[i][col]!='^' && tabla[i+1][col]!='^')
+                nr++;
+            else nr=0;
+        if(nr>=3) return 1;
+
+        //pe diagonala in sensul /
+        nr=0;
+        int egale=1;
+        int i=lin, j=col;
+        while(egale==1)
+        {
+            if(tabla[lin][col]==tabla[i+1][j-1])
+            {
+                nr++;
+                i=i+1;
+                j=j-1;
+            }
+            else egale=0;
+        }
+        if(nr>=3) return 1; //castigator
+
+        //pe diagonala in sensul \.
+        nr=0;
+        egale=1;
+        i=lin;
+        j=col;
+        while(egale==1)
+        {
+            if(tabla[lin][col]==tabla[i+1][j+1])
+            {
+                nr++;
+                i=i+1;
+                j=j+1;
+            }
+            else egale=0;
+        }
+        if(nr>=3)
+            return 1;//castigator
+
+        return 0;//necastigator
+    }
+    void afisare()
+    {
+        for (int i=0; i<8; i++)
+        {
+            for(int j=0; j<7; j++)
+                cout<<tabla[i][j]<<" ";
+            cout<<endl;
+        }
+    }
+    int gravitatie(int col)
+    {//elementul se va pune pe linia 1 evident si coloana col, stiind asta o coboram pana jos sau pana la ultima piesa daca e
+        int i=1;
+        while(tabla[i+1][col-1]=='^')
+        {
+            swap(tabla[i][col-1], tabla[i+1][col-1]);
+            i++;
+        }
+        return i;
+    }
+    void setElement(int col, char value)
+    {//punem elementul value care poate fi o sau x depinde de jucator pe linia 1 si coloana ceruta urmand sa fie coborat
+        if(col>=0 && col<7)
+            tabla[1][col]=value;
+    }
+    ~Tabla()=default;
+};
+
 
 int main() {
-    std::cout << "Hello, world!\n";
-    std::array<int, 100> v{};
-    int nr;
-    std::cout << "Introduceți nr: ";
-    /////////////////////////////////////////////////////////////////////////
-    /// Observație: dacă aveți nevoie să citiți date de intrare de la tastatură,
-    /// dați exemple de date de intrare folosind fișierul tastatura.txt
-    /// Trebuie să aveți în fișierul tastatura.txt suficiente date de intrare
-    /// (în formatul impus de voi) astfel încât execuția programului să se încheie.
-    /// De asemenea, trebuie să adăugați în acest fișier date de intrare
-    /// pentru cât mai multe ramuri de execuție.
-    /// Dorim să facem acest lucru pentru a automatiza testarea codului, fără să
-    /// mai pierdem timp de fiecare dată să introducem de la zero aceleași date de intrare.
-    ///
-    /// Pe GitHub Actions (bife), fișierul tastatura.txt este folosit
-    /// pentru a simula date introduse de la tastatură.
-    /// Bifele verifică dacă programul are erori de compilare, erori de memorie și memory leaks.
-    ///
-    /// Dacă nu puneți în tastatura.txt suficiente date de intrare, îmi rezerv dreptul să vă
-    /// testez codul cu ce date de intrare am chef și să nu pun notă dacă găsesc vreun bug.
-    /// Impun această cerință ca să învățați să faceți un demo și să arătați părțile din
-    /// program care merg (și să le evitați pe cele care nu merg).
-    ///
-    /////////////////////////////////////////////////////////////////////////
-    std::cin >> nr;
-    /////////////////////////////////////////////////////////////////////////
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "v[" << i << "] = ";
-        std::cin >> v[i];
+    //Declarare jucatori si citirea numelor
+    Jucator jucator1, jucator2;
+    cout<<"Introduceti alias-ul primului jucator: ";
+    operator>>(std::cin, jucator1);
+    cout<<endl;
+    cout<<"Introduceti alias-ul pentru al doilea jucator: ";
+    operator>>(std::cin, jucator2);
+    cout<<endl;
+
+    //declar tabla de joc
+    Tabla tabla_joc;
+    tabla_joc.afisare();
+    cout<<endl;
+
+    //decalar mutarile, mereu incepe 1
+    Mutare tura_jucator;
+    tura_jucator.setMutare(1);
+
+
+    Piesa coloana_coresp;//citim coloanele pe care punem piese
+
+
+    VerifCastig castigare;//castigare=0, cand devine 1 cineva a castigat
+    while(castigare.getCastigare()==0)
+    {
+        if(tura_jucator.getMutare()==1)
+        {
+            cout<<"Tura lui "<<jucator1.getNume()<<endl;
+            cout<<"Indroduceti numarul coloanei dorite: ";
+            operator>>(std::cin, coloana_coresp);
+            cout<<endl;
+            tabla_joc.setElement(coloana_coresp.getPiesa()-1, 'o');
+            int t=tabla_joc.gravitatie(coloana_coresp.getPiesa());
+            if(tabla_joc.verificare_jucator(t, coloana_coresp.getPiesa()-1))
+                castigare.setCastigare(1);
+            tabla_joc.afisare();
+            tura_jucator.setMutare(2);
+            if(castigare.getCastigare()==1)
+                cout<<"Felicitari "<<jucator1.getNume()<<"!!!!!";
+        }
+        else
+        {
+            cout<<"Tura lui "<<jucator2.getNume()<<endl;
+            cout<<"Indroduceti numarul coloanei dorite: ";
+            operator>>(std::cin, coloana_coresp);
+            cout<<endl;
+            tabla_joc.setElement(coloana_coresp.getPiesa()-1, 'x');
+            int t=tabla_joc.gravitatie(coloana_coresp.getPiesa());
+            if(tabla_joc.verificare_jucator(t, coloana_coresp.getPiesa()-1))
+                castigare.setCastigare(1);
+            tabla_joc.afisare();
+            tura_jucator.setMutare(1);
+            if(castigare.getCastigare()==1)
+                cout<<"Felicitari "<<jucator2.getNume()<<"!!!!!";
+        }
+
     }
-    std::cout << "\n\n";
-    std::cout << "Am citit de la tastatură " << nr << " elemente:\n";
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "- " << v[i] << "\n";
-    }
-    ///////////////////////////////////////////////////////////////////////////
-    /// Pentru date citite din fișier, NU folosiți tastatura.txt. Creați-vă voi
-    /// alt fișier propriu cu ce alt nume doriți.
-    /// Exemplu:
-    /// std::ifstream fis("date.txt");
-    /// for(int i = 0; i < nr2; ++i)
-    ///     fis >> v2[i];
-    ///
-    ///////////////////////////////////////////////////////////////////////////
-    ///                Exemplu de utilizare cod generat                     ///
-    ///////////////////////////////////////////////////////////////////////////
-    Helper helper;
-    helper.help();
-    ///////////////////////////////////////////////////////////////////////////
+
     return 0;
 }
