@@ -135,18 +135,20 @@ public:
                 std::cout << std::endl;
                 //we put the element on the column we read
                 board->setElement(columnReceivingNextPiece->getPiece() - 1, 'o');
-
                 //the piece falls using the gravity function, in t we keep the line the piece stops
-                int t = board->gravity(columnReceivingNextPiece->getPiece());
-                board->rotate90degreesClockWise();
+                board->gravity(columnReceivingNextPiece->getPiece());
                 board->print();
-                if (board->check_player(t, columnReceivingNextPiece->getPiece() - 1))
-                    winGame.operator=(1);
+                board->rotate90degreesClockWise();
 
                 //check if the move won the match
+                for(int line=1; line<8; line++)
+                    for(int column=0; column<7; column++)
+                            if (board->check_player(line, column)==1)
+                                winGame.operator=(1);
                 board->print();
-                playerMove->setMove(2);
+
                 //switch to player 2
+                playerMove->setMove(2);
                 if (winGame.getWin() == 1)
                     std::cout << "Congratilation " << player1->getNume() << "!!!!!";
                 if (board->noWin()==0)
@@ -164,13 +166,16 @@ public:
                 }
                 std::cout << std::endl;
                 board->setElement(columnReceivingNextPiece->getPiece() - 1, 'x');
-                int t = board->gravity(columnReceivingNextPiece->getPiece());
-                board->rotate90degreesClockWise();
+                //the piece falls using the gravity function, in t we keep the line the piece stops
+                board->gravity(columnReceivingNextPiece->getPiece());
                 board->print();
-                if (board->check_player(t, columnReceivingNextPiece->getPiece() - 1))//crash
-                    winGame.operator=(1);
+                board->rotate90degreesClockWise();
 
-
+                //check if the move won the match
+                for(int line=1; line<8; line++)
+                    for(int column=0; column<7; column++)
+                        if (board->check_player(line, column)==1)
+                            winGame.operator=(1);
                 board->print();
                 playerMove->setMove(1);
                 if (winGame.getWin() == 1)

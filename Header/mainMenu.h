@@ -6,10 +6,8 @@
 #define OOP_MAINMENU_H
 
 #include <iostream>
-class Menu{
-private:
-    virtual void display()=0;
-};
+#include "Menu.h"
+
 
 class mainMenu:public Menu{
 private:

@@ -1,88 +1,7 @@
 //
 // Created by Simona Istoc on 4/3/2024.
 //
-
-#include "../Header/Board.h"
-#include <iostream>
-
-int Board::check_player(int line, int column) {
-    //line check
-    int nr = 0;
-    for (int j = 0; j < 6 && nr < 3; j++)
-        if ((board[line][j] == board[line][j + 1]) && board[line][j] != '^' && board[line][j + 1] != '^')
-            nr++;
-        else nr = 0;
-    if (nr >= 3) return 1;//winner
-
-    //column check
-    nr = 0;
-    for (int i = line; i < 7 && nr < 3; i++)
-        if ((board[i][column] == board[i + 1][column]) && board[i][column] != '^' && board[i + 1][column] != '^')
-            nr++;
-        else nr = 0;
-    if (nr >= 3) return 1;
-
-    //diagonally check / down
-    nr = 0;
-    int samePiece = 1;
-    int i = line, j = column;
-    while (samePiece == 1) {
-        if (board[line][column] == board[i + 1][j - 1]) {
-            nr++;
-            i = i + 1;
-            j = j - 1;
-        } else samePiece = 0;
-    }
-    if (nr >= 3)
-        return 1; //winner
-
-    //diagonally check / up
-    nr = 0;
-    samePiece = 1;
-    i = line;
-    j = column;
-    while (samePiece == 1) {
-        if (board[line][column] == board[i - 1][j + 1]) {
-            nr++;
-            i = i - 1;
-            j = j + 1;
-        } else samePiece = 0;
-    }
-    if (nr >= 3)
-        return 1; //winner
-
-    //diagonally check \ down
-    nr = 0;
-    samePiece = 1;
-    i = line;
-    j = column;
-    while (samePiece == 1) {
-        if (board[line][column] == board[i + 1][j + 1]) {
-            nr++;
-            i = i + 1;
-            j = j + 1;
-        } else samePiece = 0;
-    }
-    if (nr >= 3)
-        return 1;// winner
-
-    //diagonally check \ up
-    nr = 0;
-    samePiece = 1;
-    i = line;
-    j = column;
-    while (samePiece == 1) {
-        if (board[line][column] == board[i - 1][j - 1]) {
-            nr++;
-            i = i - 1;
-            j = j - 1;
-        } else samePiece = 0;
-    }
-    if (nr >= 3)
-        return 1; //winner
-    return 0;//round_ongoing
-}
-
+//
 //void Board::printForLevel2() {
 //    for (int i = 0; i < 8; i++) {
 //        for (int j = 0; j < 8; j++)
@@ -90,6 +9,91 @@ int Board::check_player(int line, int column) {
 //        std::cout << std::endl;
 //    }
 //}
+#include "../Header/Board.h"
+#include "../Header/columnFullException.h"
+#include "../Header/noOneWinException.h"
+#include <iostream>
+
+int Board::check_player(int line, int column) {
+    if(board[line][column]!='^') {
+        //line check
+        int nr = 0;
+        for (int j = 0; j < 6 && nr < 3; j++)
+            if ((board[line][j] == board[line][j + 1]) && board[line][j] != '^' && board[line][j + 1] != '^')
+                nr++;
+            else nr = 0;
+        if (nr >= 3) return 1;//winner
+
+        //column check
+        nr = 0;
+        for (int i = line; i < 7 && nr < 3; i++)
+            if ((board[i][column] == board[i + 1][column]) && board[i][column] != '^' && board[i + 1][column] != '^')
+                nr++;
+            else nr = 0;
+        if (nr >= 3) return 1;
+
+        //diagonally check / down
+        nr = 0;
+        int samePiece = 1;
+        int i = line, j = column;
+        while (samePiece == 1) {
+            if (board[line][column] == board[i + 1][j - 1]) {
+                nr++;
+                i = i + 1;
+                j = j - 1;
+            } else samePiece = 0;
+        }
+        if (nr >= 3)
+            return 1; //winner
+
+        //diagonally check / up
+        nr = 0;
+        samePiece = 1;
+        i = line;
+        j = column;
+        while (samePiece == 1) {
+            if (board[line][column] == board[i - 1][j + 1]) {
+                nr++;
+                i = i - 1;
+                j = j + 1;
+            } else samePiece = 0;
+        }
+        if (nr >= 3)
+            return 1; //winner
+
+        //diagonally check \ down
+        nr = 0;
+        samePiece = 1;
+        i = line;
+        j = column;
+        while (samePiece == 1) {
+            if (board[line][column] == board[i + 1][j + 1]) {
+                nr++;
+                i = i + 1;
+                j = j + 1;
+            } else samePiece = 0;
+        }
+        if (nr >= 3)
+            return 1;// winner
+
+        //diagonally check \ up
+        nr = 0;
+        samePiece = 1;
+        i = line;
+        j = column;
+        while (samePiece == 1) {
+            if (board[line][column] == board[i - 1][j - 1]) {
+                nr++;
+                i = i - 1;
+                j = j - 1;
+            } else samePiece = 0;
+        }
+        if (nr >= 3)
+            return 1; //winner
+    }
+    return 0;//round_ongoing
+}
+
 void Board::print() {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 7; j++)
@@ -98,17 +102,9 @@ void Board::print() {
     }
 }
 
-
-//nu merge
-class columnFullException:public std::exception{
-public:
-    const char* what() const noexcept override{
-        return "The column is full, no one won\n";
-    }
-};
 int Board::fullColumn(int column) {
     try{
-        if (board[1][column] == '^')
+        if (board[1][column] != '^')
             throw columnFullException();//column full
     }
     catch (columnFullException &e){
@@ -131,7 +127,7 @@ int Board::gravity(int column) {
 }
 
 void Board::setElement(int column, char value) {
-//    set the element the the first line and the specific column
+//    set the element the first line and the specific column
     if (column >= 0 && column < 7)
         board[1][column] = value;
 }
@@ -147,17 +143,9 @@ Board::Board() {
         }
 }
 
-
-
-class noOneWinException:public std::exception{
-public:
-    const char* what() const noexcept override{
-        return "All the column are full, no one won\n";
-    }
-};
 int Board::noWin() {
     int nr=0;
-    for(int j=0; j<8; j++)
+    for(int j=0; j<7; j++)
         if(board[1][j]!='^')
             nr++;
     try{
@@ -173,3 +161,32 @@ int Board::noWin() {
 
     return 1;
 }
+
+void Board::rotate90degreesClockWise() {
+    int matrixrotate[7][7], iRotate=0, jRotate=6;
+    for(int i=1; i<=7; i++){
+        for(int j=0; j<=6; j++){
+            matrixrotate[iRotate][jRotate]=board[i][j];
+            iRotate++;
+        }
+        jRotate--;
+        iRotate=0;
+    }
+
+    for(int i=1; i<=7; i++)
+        for(int j=0; j<=6; j++)
+            board[i][j]=matrixrotate[i-1][j];
+    //check all the pieces if they fall
+    for(int i=6; i>=1; i--)
+        for(int j=0; j<=6; j++)
+        {
+            int lin = i;
+            while (board[lin + 1][j] == '^') {
+                std::swap(board[lin][j], board[lin + 1][j]);
+                lin++;
+            }
+
+        }
+
+}
+
