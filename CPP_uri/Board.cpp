@@ -93,7 +93,13 @@ int Board::check_player(int line, int column) {
     }
     return 0;//round_ongoing
 }
-
+void Board::printForLevel2() {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++)
+            std::cout << board[i][j] << " ";
+        std::cout << std::endl;
+    }
+}
 void Board::print() {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 7; j++)
@@ -188,5 +194,38 @@ void Board::rotate90degreesClockWise() {
 
         }
 
+}
+
+void Board::rotateLine(int theLine) {
+    for (int j = 0; j <= 6/2; j++)
+        std::swap(board[theLine][j], board[theLine][6-j]);
+
+    for(int i=6; i>=1; i--)
+        for(int j=0; j<=6; j++)
+        {
+            int lin = i;
+            while (board[lin + 1][j] == '^') {
+                std::swap(board[lin][j], board[lin + 1][j]);
+                lin++;
+            }
+
+        }
+}
+
+void Board::rotateCollumn(int theCollumn) {
+    for (int i = 1; i <= 7/2; i++)
+        std::swap(board[i][theCollumn-1], board[8-i][theCollumn-1]);
+
+    for(int i=6; i>=1; i--)
+        for(int j=0; j<=6; j++)
+        {
+            int lin = i;
+            while (board[lin + 1][j] == '^') {
+                std::swap(board[lin][j], board[lin + 1][j]);
+                lin++;
+            }
+
+        }
+    
 }
 

@@ -7,6 +7,7 @@
 
 
 #include <algorithm>
+#include <iostream>
 
 class Board {
 private:
@@ -33,7 +34,11 @@ public:
 
     ~Board() = default;
 
-    int check_playerLevelTwoAndThree(int line, int column);
+    void printForLevel2();
+
+    void rotateLine(int theLine);
+
+    void rotateCollumn(int theCollumn);
 };
 
 

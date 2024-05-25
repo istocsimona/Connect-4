@@ -10,6 +10,7 @@ class Piece {
 //    we keep track of the column we place the pice
 private:
     int columnPiece;
+    char columnOrLine;
 public:
     Piece() = default;
 

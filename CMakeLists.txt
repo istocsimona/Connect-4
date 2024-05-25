@@ -104,12 +104,14 @@ add_executable(${PROJECT_NAME} main.cpp
         Header/winCheck.h
         CPP_uri/mainMenu.cpp
         Header/mainMenu.h
-        CPP_uri/Menu.cpp
-        Header/Menu.h
         CPP_uri/columnFullException.cpp
         Header/columnFullException.h
         CPP_uri/noOneWinException.cpp
         Header/noOneWinException.h
+        CPP_uri/columnOrLine.cpp
+        Header/columnOrLine.h
+        CPP_uri/rotation.cpp
+        Header/rotation.h
 )
 
 ###############################################################################

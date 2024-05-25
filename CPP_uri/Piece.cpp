@@ -11,3 +11,4 @@ std::istream &operator>>(std::istream &in, Piece &piece) {
     in >> piece.columnPiece;
     return in;
 }
+
