@@ -11,7 +11,8 @@ private:
     int whatLineOrColumnToRotate;
 public:
     int getWhatLineOrColumnToRotate() const;
-
+    rotation()=default;
+    ~rotation()=default;
     friend std::istream &operator>>(std::istream &in, rotation &choose);
 
 };

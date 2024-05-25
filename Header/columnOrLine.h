@@ -14,7 +14,8 @@ private:
 
 public:
     char getChooseColumnOrLine() const;
-
+    columnOrLine()=default;
+    ~columnOrLine()=default;
     friend std::istream &operator>>(std::istream &in, columnOrLine &choose);
 };
 
