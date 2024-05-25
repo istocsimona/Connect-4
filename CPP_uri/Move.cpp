@@ -11,6 +11,3 @@ int Move::getMove() const {
     return move;
 }
 
-std::ostream &operator<<(std::ostream &out, const Move &move) {
-    out << move.move;
-}

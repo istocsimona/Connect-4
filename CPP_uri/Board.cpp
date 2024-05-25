@@ -19,7 +19,7 @@ int Board::check_player(int line, int column) {
         //line check
         int nr = 0;
         for (int j = 0; j < 6 && nr < 3; j++)
-            if ((board[line][j] == board[line][j + 1]) && board[line][j] != '^' && board[line][j + 1] != '^')
+            if ((board[line][j] == board[line][j + 1]) && board[line][j] != '^')
                 nr++;
             else nr = 0;
         if (nr >= 3) return 1;//winner
@@ -27,7 +27,7 @@ int Board::check_player(int line, int column) {
         //column check
         nr = 0;
         for (int i = line; i < 7 && nr < 3; i++)
-            if ((board[i][column] == board[i + 1][column]) && board[i][column] != '^' && board[i + 1][column] != '^')
+            if ((board[i][column] == board[i + 1][column]) && board[i][column] != '^')
                 nr++;
             else nr = 0;
         if (nr >= 3) return 1;
