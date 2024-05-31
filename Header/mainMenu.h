@@ -13,13 +13,12 @@ class mainMenu{//menuOption
 public:
     virtual ~mainMenu()=default;
     virtual void execute()const=0;
-
 };
 
 class menuFactory{
 public:
     virtual ~menuFactory()=default;
-    virtual std::unique_ptr<mainMenu> createMenuOption(const int option)const=0;
+    virtual std::unique_ptr<mainMenu> createMenuOption(const int opt)const=0;
 
 };
 

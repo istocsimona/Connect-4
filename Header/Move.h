@@ -12,7 +12,7 @@ private:
 public:
     Move() = default;
     void setMove(const int &move);
-    [[nodiscard]] int getMove() const;friend std::ostream &operator<<(std::ostream &out, const Move &move);
+    [[nodiscard]] int getMove() const;
     ~Move() = default;
 };
 
